@@ -16,7 +16,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import com.sun.xml.internal.bind.marshaller.NamespacePrefixMapper;
+import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
+//import com.sun.xml.internal.bind.marshaller.NamespacePrefixMapper;
 import org.ivis.io.xml.model.EdgeComplexType;
 import org.ivis.io.xml.model.EdgeComplexType.BendPointList;
 import org.ivis.io.xml.model.EdgeComplexType.BendPointList.BendPoint;
@@ -154,15 +155,20 @@ public class XmlIOHandler
 
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-		// Set prefix mapper for proper name space prefixes in the created
-		// document.
-		marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper",
-				new EmptyNameSpacePrefixMapper());
+		// A custom prefix mapper for proper name space prefixes (for empty prefixes)
+		// in the created XML document.
+		// TODO can we make it w/o using java JAXB-RI libs, com.sun*???
+		NamespacePrefixMapper prefixMapper = new NamespacePrefixMapper() {
+			public String getPreferredPrefix(String namespaceUri, String suggestion, boolean requirePrefix)
+			{
+				return (namespaceUri.equals("")) ? null : "xsi";
+			}
+		};
+		marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", prefixMapper);
 
 		writePortAndProcessNodes();
 //		writeRigidEdges();
 		marshaller.marshal(this.loadedModel, outputStream);
-
 	}
 
 	/**
@@ -349,28 +355,6 @@ public class XmlIOHandler
 		else
 		{
 			this.xmlIDToXMLObject.put(id, xmlGraphObject);
-		}
-	}
-
-	/**
-	 * This class provides a custom namespace mapper for empty prefixes in the
-	 * created xml document
-	 * 
-	 * @author Esat
-	 */
-	private class EmptyNameSpacePrefixMapper extends NamespacePrefixMapper
-	{
-		public String getPreferredPrefix(String namespaceUri,
-				String suggestion, boolean requirePrefix)
-		{
-			if (namespaceUri.equals(""))
-			{
-				return null;
-			}
-			else
-			{
-				return "xsi";
-			}
 		}
 	}
 
