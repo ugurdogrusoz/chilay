@@ -16,7 +16,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import com.sun.xml.internal.bind.marshaller.NamespacePrefixMapper;
+import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 import org.ivis.io.xml.model.EdgeComplexType;
 import org.ivis.io.xml.model.EdgeComplexType.BendPointList;
 import org.ivis.io.xml.model.EdgeComplexType.BendPointList.BendPoint;
