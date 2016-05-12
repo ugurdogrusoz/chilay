@@ -466,7 +466,7 @@ public class ClusterLayout extends CoSELayout
 				// Compare two polygons
 				overlap = IGeometry.convexPolygonOverlap(nodePolygon, zonePolygon);
 				
-				if ((double) overlap[0] != 0.0) 
+				if ((double) overlap[0] != 0.0)
 				{
 					//System.out.println("Overlap with zone" +zone.getClusterID());
 					int flag = 0;

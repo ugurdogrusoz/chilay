@@ -655,7 +655,7 @@ abstract public class IGeometry
 	 * uses only the edges of the first polygon (polygon "p1")
 	 * to build the list of candidate separating axes.
 	*/
-	public static Object [] findSeparatingAxis (ArrayList<PointD> p1, 
+	public static Object [] findSeparatingAxis (ArrayList<PointD> p1,
 										ArrayList<PointD> p2) 
 	{
 		Object [] overlapInfo;
@@ -755,9 +755,9 @@ abstract public class IGeometry
 	 * between the polygons. If there is no separating axis, 
 	 * method returns true. 
 	 */	
-	public static Object [] convexPolygonOverlap (ArrayList<PointD> p1, 
+	public static Object [] convexPolygonOverlap (ArrayList<PointD> p1,
 			ArrayList<PointD> p2) 
-	{		
+	{
 		Object [] overlapInfo1;
 		Object [] overlapInfo2;
 		
@@ -776,7 +776,7 @@ abstract public class IGeometry
 		
 		if (Math.abs((double) overlapInfo1[0]) < Math.abs((double) overlapInfo2[0]))
 		{		
-			overlapInfo1[0] = -((double) overlapInfo1[0]);			
+			overlapInfo1[0] = -((double) overlapInfo1[0]);
 			return overlapInfo1;
 		}
 		else

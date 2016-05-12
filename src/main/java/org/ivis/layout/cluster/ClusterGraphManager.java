@@ -27,10 +27,11 @@ import org.ivis.util.IntegerQuickSort;
 public class ClusterGraphManager extends CoSEGraphManager
 {	
 	HashMap overlappingClusterMap;
-	
+
+	// a value in the list is a list[2], where
 	// first element is the new cluster
 	// second element is the list of clusters
-	ArrayList zoneGraphEdgeTable;
+	ArrayList<ArrayList> zoneGraphEdgeTable;
 	
 	int maxClusterId;
 	ArrayList zoneGraphEdges;
@@ -49,7 +50,7 @@ public class ClusterGraphManager extends CoSEGraphManager
 		firstLevelClusters = new ArrayList<Cluster>();
 		
 		overlappingClusterMap = new HashMap();
-		zoneGraphEdgeTable = new ArrayList<>();
+		zoneGraphEdgeTable = new ArrayList<ArrayList>();
 		zoneGraphNodes = new ArrayList<CoSENode>();
 		zoneGraphEdges = new ArrayList<CoSEEdge>();
 		zoneGraph = new ZoneGraph(new CoSELayout());
@@ -108,11 +109,11 @@ public class ClusterGraphManager extends CoSEGraphManager
 	 */
 	private void addEdgesToZoneGraph() 
 	{
-		for (Object o: this.zoneGraphEdgeTable)
+		for (ArrayList<?> info: this.zoneGraphEdgeTable)
 		{
-			ArrayList info = (ArrayList) o;
+			//can fail in next two lines if there's a bug somewhere (type mismatch)
 			Cluster source = (Cluster) info.get(0);
-			List target = (List) info.get(1);
+			List<Cluster> target = (List<Cluster>) info.get(1);
 			
 			CoSENode sourceNode = null;
 			CoSENode targetNode = null;
@@ -124,10 +125,8 @@ public class ClusterGraphManager extends CoSEGraphManager
 					break;					
 			}
 
-			for (Object tn: target)
+			for (Cluster targetN: target)
 			{
-				Cluster targetN = (Cluster) tn;				
-			
 				for (Object n : zoneGraph.getNodes())
 				{
 					targetNode = (CoSENode) n;
@@ -197,9 +196,9 @@ public class ClusterGraphManager extends CoSEGraphManager
 					Cluster newCluster = this.getClusterManager().getClusterByID(maxClusterId);
 					overlappingClusterMap.put(ocString, newCluster);
 					
-					ArrayList temp = new ArrayList();
+					ArrayList<Object> temp = new ArrayList();
 					temp.add(newCluster);
-					temp.add(new ArrayList(node.getClusters()));
+					temp.add(new ArrayList<Cluster>(node.getClusters()));
 					
 					zoneGraphEdgeTable.add(temp);
 					node.resetClusters();
