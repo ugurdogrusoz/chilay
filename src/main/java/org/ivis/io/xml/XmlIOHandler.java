@@ -152,18 +152,20 @@ public class XmlIOHandler
 		}
 
 		Marshaller marshaller = this.jaxbContext.createMarshaller();
-
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-		// Set prefix mapper for proper name space prefixes in the created
-		// document.
-		marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper",
-				new EmptyNameSpacePrefixMapper());
+		// Set prefix mapper for proper name space prefixes in the created document.
+		NamespacePrefixMapper emptyNamespacePrefixMapper = new NamespacePrefixMapper() {
+			public String getPreferredPrefix(String namespaceUri, String suggestion, boolean requirePrefix)
+			{
+				return (namespaceUri.equals("")) ? null : "xsi";
+			}
+		};
+		marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", emptyNamespacePrefixMapper);
 
 		writePortAndProcessNodes();
 //		writeRigidEdges();
 		marshaller.marshal(this.loadedModel, outputStream);
-
 	}
 
 	/**
@@ -350,28 +352,6 @@ public class XmlIOHandler
 		else
 		{
 			this.xmlIDToXMLObject.put(id, xmlGraphObject);
-		}
-	}
-
-	/**
-	 * This class provides a custom namespace mapper for empty prefixes in the
-	 * created xml document
-	 * 
-	 * @author Esat
-	 */
-	private class EmptyNameSpacePrefixMapper extends NamespacePrefixMapper
-	{
-		public String getPreferredPrefix(String namespaceUri,
-				String suggestion, boolean requirePrefix)
-		{
-			if (namespaceUri.equals(""))
-			{
-				return null;
-			}
-			else
-			{
-				return "xsi";
-			}
 		}
 	}
 
